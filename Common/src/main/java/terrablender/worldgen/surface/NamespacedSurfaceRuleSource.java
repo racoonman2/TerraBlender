@@ -26,7 +26,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 public record NamespacedSurfaceRuleSource(SurfaceRules.RuleSource base, Map<String, SurfaceRules.RuleSource> sources) implements SurfaceRules.RuleSource
@@ -54,7 +53,6 @@ public record NamespacedSurfaceRuleSource(SurfaceRules.RuleSource base, Map<Stri
 
     record NamespacedRule(SurfaceRules.Context context, SurfaceRules.SurfaceRule baseRule, Map<String, SurfaceRules.SurfaceRule> rules) implements SurfaceRules.SurfaceRule
     {
-        @Nullable
         public BlockState tryApply(int x, int y, int z)
         {
             Holder<Biome> biome = context.biome.get();

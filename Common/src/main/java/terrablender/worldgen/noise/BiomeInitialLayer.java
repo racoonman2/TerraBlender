@@ -27,7 +27,7 @@ public class BiomeInitialLayer extends WeightedRandomLayer<WeightedEntry.Wrapper
     @Override
     protected int getEntryIndex(WeightedEntry.Wrapper<ResourceKey<Biome>> entry)
     {
-        return this.resolveId(entry.getData());
+        return this.resolveId(entry.data());
     }
 
     @Override

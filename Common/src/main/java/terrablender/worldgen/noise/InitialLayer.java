@@ -45,7 +45,7 @@ public class InitialLayer extends WeightedRandomLayer<WeightedEntry.Wrapper<Regi
     @Override
     protected int getEntryIndex(WeightedEntry.Wrapper<Region> entry)
     {
-        return Regions.getIndex(this.regionType, entry.getData().getName());
+        return Regions.getIndex(this.regionType, entry.data().getName());
     }
 
     private static List<WeightedEntry.Wrapper<Region>> createEntries(RegistryAccess registryAccess, RegionType regionType)

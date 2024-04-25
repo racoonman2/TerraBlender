@@ -1,6 +1,14 @@
+// Hacky fix for weird gson issues with Fabric
+buildscript {
+    dependencies {
+        classpath 'com.google.code.gson:gson:2.10.1'
+    }
+}
+
 plugins {
     // Required for NeoGradle
     id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
+
     // Used for changelog generation
     id 'net.minecraftforge.gradleutils' version '2.2.0'
 }
@@ -25,7 +33,7 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'maven-publish'
     
-    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    java.toolchain.languageVersion = JavaLanguageVersion.of(21)
     java.withSourcesJar()
     java.withJavadocJar()
 
@@ -58,7 +66,7 @@ subprojects {
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
-        it.options.release.set(17)
+        it.options.release.set(21)
     }
 
     // Disables Gradle's custom module metadata from being published to maven. The

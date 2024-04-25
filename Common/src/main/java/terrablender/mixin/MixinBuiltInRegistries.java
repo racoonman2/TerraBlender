@@ -18,7 +18,9 @@
 package terrablender.mixin;
 
 import com.mojang.serialization.Lifecycle;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.core.WritableRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -35,14 +37,14 @@ import terrablender.worldgen.surface.NamespacedSurfaceRuleSource;
 public abstract class MixinBuiltInRegistries
 {
     @Shadow
-    private static <T> Registry<T> registerSimple(ResourceKey<? extends Registry<T>> key, Lifecycle lifecycle, BuiltInRegistries.RegistryBootstrap<T> bootstrap) { return null; }
+    private static <T, R extends WritableRegistry<T>> R internalRegister(ResourceKey<? extends Registry<T>> $$0, R $$1, BuiltInRegistries.RegistryBootstrap<T> $$2) { return null; }
 
     @Inject(method="registerSimple(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap;)Lnet/minecraft/core/Registry;", at=@At("HEAD"), cancellable = true)
     private static void registerSimple(ResourceKey key, BuiltInRegistries.RegistryBootstrap bootstrap, CallbackInfoReturnable<Registry> cir)
     {
         if (key == Registries.MATERIAL_RULE)
         {
-            cir.setReturnValue(registerSimple(key, Lifecycle.stable(), (registry -> {
+            cir.setReturnValue(internalRegister(key, new MappedRegistry(key, Lifecycle.stable(), false), (registry -> {
                 // Run the Vanilla bootstrap
                 bootstrap.run(registry);
 

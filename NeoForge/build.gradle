@@ -37,11 +37,6 @@ dependencies {
     compileOnly project(":Common")
 }
 
-mixin {
-    config "${mod_id}.mixins.json"
-    config "${mod_id}_neoforge.mixins.json"
-}
-
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code
 TaskCollection.metaClass.excludingNeoTasks = { ->
     delegate.matching { !it.name.startsWith("neo") }

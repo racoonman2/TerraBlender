@@ -80,10 +80,10 @@ public class MixinTheEndBiomeSource implements IExtendedTheEndBiomeSource
 
         // Create a set of all biomes
         var builder = ImmutableSet.<ResourceKey<Biome>>builder();
-        builder.addAll(highlands.stream().map(WeightedEntry.Wrapper::getData).toList());
-        builder.addAll(midlands.stream().map(WeightedEntry.Wrapper::getData).toList());
-        builder.addAll(edge.stream().map(WeightedEntry.Wrapper::getData).toList());
-        builder.addAll(islands.stream().map(WeightedEntry.Wrapper::getData).toList());
+        builder.addAll(highlands.stream().map(WeightedEntry.Wrapper::data).toList());
+        builder.addAll(midlands.stream().map(WeightedEntry.Wrapper::data).toList());
+        builder.addAll(edge.stream().map(WeightedEntry.Wrapper::data).toList());
+        builder.addAll(islands.stream().map(WeightedEntry.Wrapper::data).toList());
         builder.add(Biomes.THE_END);
         Set<ResourceKey<Biome>> allBiomes = builder.build();
 
