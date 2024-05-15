@@ -110,8 +110,7 @@ public class EndBiomeRegistry
         return ImmutableList.copyOf(islandBiomes);
     }
 
-    static
-    {
+    static {
         registerHighlandsBiome(Biomes.END_HIGHLANDS, TerraBlender.CONFIG.vanillaEndHighlandsWeight);
         registerMidlandsBiome(Biomes.END_MIDLANDS, TerraBlender.CONFIG.vanillaEndMidlandsWeight);
         registerEdgeBiome(Biomes.END_BARRENS, TerraBlender.CONFIG.vanillaEndBarrensWeight);

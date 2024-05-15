@@ -17,24 +17,23 @@
  */
 package terrablender.api;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.level.levelgen.SurfaceRules;
-import terrablender.worldgen.TBSurfaceRuleData;
-import terrablender.worldgen.surface.NamespacedSurfaceRuleSource;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mojang.datafixers.util.Pair;
+
+import net.minecraft.world.level.levelgen.SurfaceRules;
+import terrablender.worldgen.TBSurfaceRuleData;
+
 public class SurfaceRuleManager
 {
-    private static Map<RuleCategory, Map<String, SurfaceRules.RuleSource>> surfaceRules = Maps.newHashMap();
-    private static Map<RuleCategory, SurfaceRules.RuleSource> defaultSurfaceRules = Maps.newHashMap();
-    private static Map<RuleCategory, Map<RuleStage, List<Pair<Integer, SurfaceRules.RuleSource>>>> defaultSurfaceRuleInjections = Maps.newHashMap();
+    private static Map<RuleCategory, Map<String, SurfaceRules.RuleSource>> surfaceRules = Maps.newLinkedHashMap(); // surface rule order actually matters now so use a map type that preserves that
+    private static Map<RuleCategory, SurfaceRules.RuleSource> defaultSurfaceRules = Maps.newLinkedHashMap();
+    private static Map<RuleCategory, Map<RuleStage, List<Pair<Integer, SurfaceRules.RuleSource>>>> defaultSurfaceRuleInjections = Maps.newLinkedHashMap();
 
     /**
      * Add surface rules for biomes belonging to a modded namespace.
@@ -80,17 +79,20 @@ public class SurfaceRuleManager
     }
 
     /**
-     * Gets the namespaced rules for a given category.
+     * Gets the surface rules for a given category.
      * @param category the category to get the surface rules for.
-     * @param fallback the surface rules to fallback on.
-     * @return the namespaced rules.
+     * @param datapackRules the surface rules to fallback on.
+     * @return the surface rules.
      */
-    public static SurfaceRules.RuleSource getNamespacedRules(RuleCategory category, SurfaceRules.RuleSource fallback)
-    {
-        ImmutableMap.Builder<String, SurfaceRules.RuleSource> builder = ImmutableMap.builder();
-        builder.put("minecraft", getDefaultSurfaceRules(category));
-        builder.putAll(surfaceRules.get(category));
-        return new NamespacedSurfaceRuleSource(fallback, builder.build());
+    public static SurfaceRules.RuleSource getSurfaceRules(RuleCategory category, SurfaceRules.RuleSource datapackRules) {
+    	// store surface rules in a list instead of by namespace. This removes the need to do a biome lookup to get the namespace, which is the main source of the lag.
+        ImmutableList.Builder<SurfaceRules.RuleSource> builder = ImmutableList.builder();
+        builder.addAll(surfaceRules.get(category).values());
+        builder.add(datapackRules);
+
+//		These are essentially a copy of the vanilla surface rules, and I can't find any way to have them be in the same sequence as the datapack rules without one overriding the other.
+//      builder.add(getDefaultSurfaceRules(category));
+        return SurfaceRules.sequence(builder.build().toArray(SurfaceRules.RuleSource[]::new));
     }
 
     /**

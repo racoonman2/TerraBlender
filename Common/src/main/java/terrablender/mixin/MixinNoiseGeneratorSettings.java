@@ -46,7 +46,7 @@ public class MixinNoiseGeneratorSettings implements IExtendedNoiseGeneratorSetti
         if (this.ruleCategory != null)
         {
             if (this.namespacedSurfaceRuleSource == null)
-                this.namespacedSurfaceRuleSource = SurfaceRuleManager.getNamespacedRules(this.ruleCategory, this.surfaceRule);
+                this.namespacedSurfaceRuleSource = SurfaceRuleManager.getSurfaceRules(this.ruleCategory, this.surfaceRule);
 
             cir.setReturnValue(this.namespacedSurfaceRuleSource);
         }
